@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<record_update table="sys_rest_message">
+  <sys_rest_message action="INSERT_OR_UPDATE">
+    <name>Moveworks Claude API</name>
+    <base_url>https://api.anthropic.com</base_url>
+    <description>Anthropic Claude API for Moveworks object generation</description>
+    <sys_scope>x_mwb</sys_scope>
+  </sys_rest_message>
+  <sys_rest_message_fn action="INSERT_OR_UPDATE">
+    <name>Build Object</name>
+    <function_name>Build Object</function_name>
+    <http_method>POST</http_method>
+    <rest_endpoint>https://api.anthropic.com/v1/messages</rest_endpoint>
+    <rest_message>Moveworks Claude API</rest_message>
+    <content_type>application/json</content_type>
+    <sys_scope>x_mwb</sys_scope>
+  </sys_rest_message_fn>
+  <!-- HTTP Headers -->
+  <sys_rest_message_fn_headers action="INSERT_OR_UPDATE">
+    <name>x-api-key</name>
+    <value>YOUR_ANTHROPIC_API_KEY_HERE</value>
+  </sys_rest_message_fn_headers>
+  <sys_rest_message_fn_headers action="INSERT_OR_UPDATE">
+    <name>anthropic-version</name>
+    <value>2023-06-01</value>
+  </sys_rest_message_fn_headers>
+  <sys_rest_message_fn_headers action="INSERT_OR_UPDATE">
+    <name>content-type</name>
+    <value>application/json</value>
+  </sys_rest_message_fn_headers>
+</record_update>
