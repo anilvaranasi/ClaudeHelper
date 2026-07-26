@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<record_update table="sys_script">
+  <sys_script action="INSERT_OR_UPDATE">
+    <name>Moveworks Object - Set Defaults on Insert</name>
+    <collection>x_mwb_mw_object</collection>
+    <action_insert>true</action_insert>
+    <action_update>false</action_update>
+    <action_delete>false</action_delete>
+    <when>before</when>
+    <order>100</order>
+    <active>true</active>
+    <sys_scope>x_mwb</sys_scope>
+    <script><![CDATA[
+(function executeRule(current, previous /*null when async*/) {
+    if (gs.nil(current.state)) {
+        current.state = 'draft';
+    }
+    if (gs.nil(current.object_type) && !gs.nil(current.object_json)) {
+        try {
+            var parsed = JSON.parse(current.object_json);
+            current.object_type = parsed.type || 'action';
+            current.object_id   = parsed.id   || '';
+            current.object_name = parsed.name || '';
+        } catch (e) {
+            gs.warn('MoveworksObject BR: could not parse object_json - ' + e.message);
+        }
+    }
+})(current, previous);
+    ]]></script>
+  </sys_script>
+</record_update>
