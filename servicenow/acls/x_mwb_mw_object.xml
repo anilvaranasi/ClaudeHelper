@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<record_update table="sys_security_acl">
+
+  <!-- Read: all authenticated users -->
+  <sys_security_acl action="INSERT_OR_UPDATE">
+    <name>x_mwb_mw_object</name>
+    <operation>read</operation>
+    <admin_overrides>true</admin_overrides>
+    <active>true</active>
+    <sys_scope>x_mwb</sys_scope>
+    <script><![CDATA[answer = gs.hasRole('x_mwb.user') || gs.hasRole('admin');]]></script>
+  </sys_security_acl>
+
+  <!-- Write: x_mwb.admin or admin role -->
+  <sys_security_acl action="INSERT_OR_UPDATE">
+    <name>x_mwb_mw_object</name>
+    <operation>write</operation>
+    <admin_overrides>true</admin_overrides>
+    <active>true</active>
+    <sys_scope>x_mwb</sys_scope>
+    <script><![CDATA[answer = gs.hasRole('x_mwb.admin') || gs.hasRole('admin');]]></script>
+  </sys_security_acl>
+
+  <!-- Delete: admin only -->
+  <sys_security_acl action="INSERT_OR_UPDATE">
+    <name>x_mwb_mw_object</name>
+    <operation>delete</operation>
+    <admin_overrides>true</admin_overrides>
+    <active>true</active>
+    <sys_scope>x_mwb</sys_scope>
+    <script><![CDATA[answer = gs.hasRole('admin');]]></script>
+  </sys_security_acl>
+
+</record_update>
