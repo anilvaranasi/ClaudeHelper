@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<record_update table="sys_db_object">
+  <sys_db_object action="INSERT_OR_UPDATE">
+    <name>x_mwb_mw_object</name>
+    <label>Moveworks Object</label>
+    <plural_label>Moveworks Objects</plural_label>
+    <sys_scope>x_mwb</sys_scope>
+    <super_class>task</super_class>
+  </sys_db_object>
+
+  <!-- Columns -->
+  <sys_dictionary action="INSERT_OR_UPDATE">
+    <name>x_mwb_mw_object</name>
+    <element>request</element>
+    <column_label>User Request</column_label>
+    <internal_type>string</internal_type>
+    <max_length>1000</max_length>
+    <mandatory>true</mandatory>
+  </sys_dictionary>
+  <sys_dictionary action="INSERT_OR_UPDATE">
+    <name>x_mwb_mw_object</name>
+    <element>object_id</element>
+    <column_label>Object ID</column_label>
+    <internal_type>string</internal_type>
+    <max_length>255</max_length>
+  </sys_dictionary>
+  <sys_dictionary action="INSERT_OR_UPDATE">
+    <name>x_mwb_mw_object</name>
+    <element>object_name</element>
+    <column_label>Object Name</column_label>
+    <internal_type>string</internal_type>
+    <max_length>255</max_length>
+  </sys_dictionary>
+  <sys_dictionary action="INSERT_OR_UPDATE">
+    <name>x_mwb_mw_object</name>
+    <element>object_type</element>
+    <column_label>Object Type</column_label>
+    <internal_type>string</internal_type>
+    <max_length>50</max_length>
+  </sys_dictionary>
+  <sys_dictionary action="INSERT_OR_UPDATE">
+    <name>x_mwb_mw_object</name>
+    <element>object_json</element>
+    <column_label>Generated JSON</column_label>
+    <internal_type>translated_text</internal_type>
+    <max_length>8000</max_length>
+  </sys_dictionary>
+  <sys_dictionary action="INSERT_OR_UPDATE">
+    <name>x_mwb_mw_object</name>
+    <element>state</element>
+    <column_label>State</column_label>
+    <internal_type>string</internal_type>
+    <max_length>50</max_length>
+  </sys_dictionary>
+</record_update>
