@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_page">
+    <sp_page action="INSERT_OR_UPDATE">
+        <acls/>
+        <category>custom</category>
+        <css_variables/>
+        <description>Moveworks Object Builder — AI-powered builder for Actions, Events, and Slots</description>
+        <draft>false</draft>
+        <hide_sibling_page_nav>false</hide_sibling_page_nav>
+        <id>moveworks-builder</id>
+        <internal>false</internal>
+        <mobile_hide_page_nav>false</mobile_hide_page_nav>
+        <mobile_nav_alignment>left</mobile_nav_alignment>
+        <public>false</public>
+        <roles>x_146833_movewor_0.user</roles>
+        <short_description>Moveworks Object Builder</short_description>
+        <sys_class_name>sp_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-07-27 02:10:00</sys_created_on>
+        <sys_id>pg1f0c869312c710945375dcebba1030</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>moveworks-builder</sys_name>
+        <sys_package display_value="Moveworks Object Builder" source="x_146833_movewor_0">063f0c869312c710945375dcebba1005</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Moveworks Object Builder">063f0c869312c710945375dcebba1005</sys_scope>
+        <sys_update_name>sp_page_pg1f0c869312c710945375dcebba1030</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-07-27 02:10:00</sys_updated_on>
+        <title>Moveworks Object Builder</title>
+    </sp_page>
+</record_update>
