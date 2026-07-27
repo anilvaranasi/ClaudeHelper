@@ -159,8 +159,8 @@
     if (input) {
         if (input.action === 'buildObject') {
             try {
-                var builder = new x_146833_movewor_0.MoveworksBuilder();
-                var result  = builder._callClaudeAPI(input.userRequest);
+                var api    = new x_146833_movewor_0.MoveworksAPI();
+                var result = api.callClaudeAPI(input.userRequest);
                 data.result = JSON.parse(result);
             } catch (e) {
                 data.error = e.message;

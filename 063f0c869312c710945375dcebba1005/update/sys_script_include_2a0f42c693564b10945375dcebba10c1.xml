@@ -9,27 +9,18 @@
         <mobile_callable>false</mobile_callable>
         <name>MoveworksBuilder</name>
         <sandbox_callable>false</sandbox_callable>
-        <script><![CDATA[var MoveworksBuilder = Class.create();
-MoveworksBuilder.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+        <script><![CDATA[/**
+ * MoveworksAPI — plain utility class, callable from widget server scripts,
+ * business rules, and other server-side contexts.
+ */
+var MoveworksAPI = Class.create();
+MoveworksAPI.prototype = {
+    initialize: function() {},
 
     /**
-     * AJAX entry point — called from widget client script via GlideAjax.
-     * sysparm_request : natural language request from the user
-     * Returns JSON string of the generated Moveworks object.
+     * Calls Anthropic Claude API and returns a JSON string of the Moveworks object.
      */
-    buildObject: function() {
-        var userRequest = this.getParameter('sysparm_request');
-        if (!userRequest) {
-            return JSON.stringify({ error: 'No request provided' });
-        }
-        return this._callClaudeAPI(userRequest);
-    },
-
-    /**
-     * Calls Anthropic Claude API via the configured REST message.
-     * Uses tool_choice to force structured Moveworks JSON output.
-     */
-    _callClaudeAPI: function(userRequest) {
+    callClaudeAPI: function(userRequest) {
         try {
             var rm = new sn_ws.RESTMessageV2('Moveworks Claude API', 'Build Object');
 
@@ -166,6 +157,30 @@ MoveworksBuilder.prototype = Object.extendsObject(AbstractAjaxProcessor, {
             userRequest,
             '</user_request>'
         ].join('\n');
+    },
+
+    type: 'MoveworksAPI'
+};
+
+/**
+ * MoveworksBuilder — AbstractAjaxProcessor wrapper for GlideAjax calls
+ * from the widget client script.
+ */
+var MoveworksBuilder = Class.create();
+MoveworksBuilder.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+
+    /**
+     * AJAX entry point — called from widget client script via GlideAjax.
+     * sysparm_request : natural language request from the user
+     * Returns JSON string of the generated Moveworks object.
+     */
+    buildObject: function() {
+        var userRequest = this.getParameter('sysparm_request');
+        if (!userRequest) {
+            return JSON.stringify({ error: 'No request provided' });
+        }
+        var api = new x_146833_movewor_0.MoveworksAPI();
+        return api.callClaudeAPI(userRequest);
     },
 
     type: 'MoveworksBuilder'

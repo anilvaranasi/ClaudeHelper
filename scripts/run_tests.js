@@ -57,7 +57,7 @@ var siExists = si.next();
 assert('MoveworksBuilder script include exists',    siExists);
 assert('Script include is active',                  siExists && si.active.toString() === 'true');
 assert('Script include is client callable',         siExists && si.client_callable.toString() === 'true');
-assert('Script include has real implementation',    siExists && si.script.toString().indexOf('_callClaudeAPI') > -1,
+assert('Script include has real implementation',    siExists && si.script.toString().indexOf('callClaudeAPI') > -1,
        'Script still contains TODO placeholder');
 
 
@@ -146,7 +146,7 @@ assert('Widget has real CSS',                      widgetExists && widget.css.to
        'CSS still contains TODO');
 assert('Widget has real client script',            widgetExists && widget.client_script.toString().indexOf('buildObject') > -1,
        'Client script still contains TODO');
-assert('Widget has real server script',            widgetExists && widget.script.toString().indexOf('_callClaudeAPI') > -1,
+assert('Widget has real server script',            widgetExists && widget.script.toString().indexOf('callClaudeAPI') > -1,
        'Server script still contains TODO');
 
 
@@ -163,11 +163,11 @@ if (!canCallAPI) {
     skip('Event object generation',    'API key not configured');
     skip('Slot object generation',     'API key not configured');
 } else {
-    var builder = new x_146833_movewor_0.MoveworksBuilder();
+    var api = new x_146833_movewor_0.MoveworksAPI();
 
     // Test Action
     try {
-        var actionResult = JSON.parse(builder._callClaudeAPI('Create an action to reset a user password (type: action)'));
+        var actionResult = JSON.parse(api.callClaudeAPI('Create an action to reset a user password (type: action)'));
         assert('Action: no error returned',        !actionResult.error, actionResult.error);
         assert('Action: has id field',             !!actionResult.id,   'id missing');
         assert('Action: id starts with action.',   actionResult.id && actionResult.id.indexOf('action.') === 0,
@@ -182,7 +182,7 @@ if (!canCallAPI) {
 
     // Test Event
     try {
-        var eventResult = JSON.parse(builder._callClaudeAPI('Create an event that fires when a new employee joins (type: event)'));
+        var eventResult = JSON.parse(api.callClaudeAPI('Create an event that fires when a new employee joins (type: event)'));
         assert('Event: no error returned',         !eventResult.error, eventResult.error);
         assert('Event: id starts with event.',     eventResult.id && eventResult.id.indexOf('event.') === 0,
                'id was: ' + eventResult.id);
@@ -195,7 +195,7 @@ if (!canCallAPI) {
 
     // Test Slot
     try {
-        var slotResult = JSON.parse(builder._callClaudeAPI('Create a slot to capture employee department name (type: slot)'));
+        var slotResult = JSON.parse(api.callClaudeAPI('Create a slot to capture employee department name (type: slot)'));
         assert('Slot: no error returned',          !slotResult.error, slotResult.error);
         assert('Slot: id starts with slot.',       slotResult.id && slotResult.id.indexOf('slot.') === 0,
                'id was: ' + slotResult.id);
@@ -217,8 +217,8 @@ if (!canCallAPI) {
 } else {
     try {
         // Generate a fresh object and save it
-        var testBuilder = new x_146833_movewor_0.MoveworksBuilder();
-        var testObjStr  = testBuilder._callClaudeAPI('Create a slot to capture ticket priority (type: slot)');
+        var testApi    = new x_146833_movewor_0.MoveworksAPI();
+        var testObjStr = testApi.callClaudeAPI('Create a slot to capture ticket priority (type: slot)');
         var testObj     = JSON.parse(testObjStr);
 
         var gr = new GlideRecord(TABLE);
