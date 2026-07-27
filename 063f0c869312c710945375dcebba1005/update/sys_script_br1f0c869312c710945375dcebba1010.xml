@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>false</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_146833_movewor_0_mw_object</collection>
+        <condition/>
+        <description>Auto-populate short_description from the user request on insert</description>
+        <execute_function/>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>MWB: Set short_description on insert</name>
+        <order>100</order>
+        <priority>100</priority>
+        <query_condition/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+    // Derive short_description from the first 160 chars of the user request
+    var req = current.getValue('request') || '';
+    if (!current.getValue('short_description') && req) {
+        current.setValue('short_description', req.substring(0, 160));
+    }
+
+    // Ensure state defaults to 'pending' when not already set
+    if (!current.getValue('state')) {
+        current.setValue('state', 'pending');
+    }
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-07-27 02:01:00</sys_created_on>
+        <sys_id>br1f0c869312c710945375dcebba1010</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>MWB: Set short_description on insert</sys_name>
+        <sys_package display_value="Moveworks Object Builder" source="x_146833_movewor_0">063f0c869312c710945375dcebba1005</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Moveworks Object Builder">063f0c869312c710945375dcebba1005</sys_scope>
+        <sys_update_name>sys_script_br1f0c869312c710945375dcebba1010</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-07-27 02:01:00</sys_updated_on>
+        <when>before</when>
+    </sys_script>
+</record_update>
