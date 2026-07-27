@@ -1,9 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
     <sp_widget action="INSERT_OR_UPDATE">
         <category>custom</category>
-        <client_script><![CDATA[// TODO: client script will be added after commit]]></client_script>
+        <client_script><![CDATA[function($http, $scope) {
+    var c = this;
+    c.data.loading    = false;
+    c.data.error      = null;
+    c.data.result     = null;
+    c.data.resultJson = null;
+    c.data.saved      = false;
+    c.data.savedSysId = null;
+    c.data.objectType = 'action';
+
+    c.buildObject = function() {
+        if (!c.data.userRequest) return;
+        c.data.loading = true;
+        c.data.error   = null;
+        c.data.result  = null;
+        c.data.saved   = false;
+
+        var fullRequest = c.data.userRequest;
+        if (c.data.objectType) {
+            fullRequest += ' (type: ' + c.data.objectType + ')';
+        }
+
+        c.server.get({
+            action:      'buildObject',
+            userRequest:  fullRequest
+        }).then(function(response) {
+            c.data.loading = false;
+            if (response.data.error) {
+                c.data.error = response.data.error;
+                return;
+            }
+            try {
+                c.data.result     = response.data.result;
+                c.data.resultJson = JSON.stringify(c.data.result, null, 2);
+            } catch (e) {
+                c.data.error = 'Could not parse response: ' + e.message;
+            }
+        }, function() {
+            c.data.loading = false;
+            c.data.error   = 'Server error. Please try again.';
+        });
+    };
+
+    c.saveObject = function() {
+        c.server.get({
+            action:     'saveObject',
+            objectJson:  JSON.stringify(c.data.result),
+            request:     c.data.userRequest
+        }).then(function(response) {
+            if (response.data.success) {
+                c.data.saved      = true;
+                c.data.savedSysId = response.data.sys_id;
+            } else {
+                c.data.error = 'Save failed: ' + response.data.error;
+            }
+        });
+    };
+
+    c.copyJson = function() {
+        var el = document.createElement('textarea');
+        el.value = c.data.resultJson;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+    };
+
+    c.reset = function() {
+        c.data.result      = null;
+        c.data.resultJson  = null;
+        c.data.userRequest = '';
+        c.data.error       = null;
+        c.data.saved       = false;
+    };
+}]]></client_script>
         <controller_as>c</controller_as>
-        <css>/* TODO: styles will be added after commit */</css>
+        <css><![CDATA[.mwb-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 0 15px;
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+}
+.mwb-header { margin-bottom: 24px; }
+.mwb-header h2 { color: #1f2328; margin-bottom: 6px; }
+.mwb-subtitle { color: #57606a; font-size: 14px; }
+.mwb-textarea { resize: vertical; min-height: 100px; font-size: 14px; }
+.mwb-type-selector { display: flex; gap: 8px; margin-top: 6px; }
+.mwb-type-btn {
+    border: 1px solid #e5e7eb;
+    background: #f7f8fa;
+    color: #1f2328;
+    padding: 6px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    transition: all 0.15s;
+}
+.mwb-type-btn.active {
+    background: #3b82d4;
+    border-color: #3b82d4;
+    color: #fff;
+}
+.mwb-build-btn { margin-top: 16px; padding: 10px 28px; font-size: 15px; }
+.mwb-error {
+    background: #fff0f0;
+    border: 1px solid #fca5a5;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-top: 16px;
+    color: #b91c1c;
+    font-size: 13px;
+}
+.mwb-result {
+    margin-top: 24px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.mwb-result-header {
+    background: #f7f8fa;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e5e7eb;
+}
+.mwb-result-header h4 { margin: 0; color: #1f2328; font-size: 15px; }
+.mwb-badges { display: flex; gap: 6px; }
+.mwb-badge-type { background: #7c5cd8; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; }
+.mwb-badge-id   { background: #3b82d4; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; }
+.mwb-json {
+    background: #1f2328;
+    color: #e6edf3;
+    padding: 16px;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    max-height: 400px;
+}
+.mwb-actions { padding: 12px 16px; display: flex; gap: 8px; background: #f7f8fa; border-top: 1px solid #e5e7eb; }
+.mwb-saved-msg { padding: 8px 16px; background: #f0fdf4; color: #166534; font-size: 13px; border-top: 1px solid #e5e7eb; }]]></css>
         <data_table>sp_instance</data_table>
         <demo_data/>
         <description>AI-powered Moveworks object builder using Claude API</description>
@@ -17,7 +155,39 @@
         <option_schema/>
         <public>false</public>
         <roles/>
-        <script><![CDATA[// TODO: server script will be added after commit]]></script>
+        <script><![CDATA[(function() {
+    if (input) {
+        if (input.action === 'buildObject') {
+            try {
+                var builder = new x_146833_movewor_0.MoveworksBuilder();
+                var result  = builder._callClaudeAPI(input.userRequest);
+                data.result = JSON.parse(result);
+            } catch (e) {
+                data.error = e.message;
+            }
+        }
+
+        if (input.action === 'saveObject') {
+            try {
+                var parsed = JSON.parse(input.objectJson);
+                var gr = new GlideRecord('x_146833_movewor_0_mw_object');
+                gr.initialize();
+                gr.setValue('request',     input.request     || '');
+                gr.setValue('object_id',   parsed.id         || '');
+                gr.setValue('object_name', parsed.name       || '');
+                gr.setValue('object_type', parsed.type       || '');
+                gr.setValue('object_json', input.objectJson);
+                gr.setValue('state',       'generated');
+                var sysId    = gr.insert();
+                data.success = true;
+                data.sys_id  = sysId;
+            } catch (e) {
+                data.success = false;
+                data.error   = e.message;
+            }
+        }
+    }
+})();]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
         <sys_created_by>admin</sys_created_by>
@@ -31,6 +201,60 @@
         <sys_update_name>sp_widget_7b0f46c693564b10945375dcebba1081</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
         <sys_updated_on>2026-07-27 01:06:27</sys_updated_on>
-        <template><![CDATA[<div><!-- TODO: UI will be added after commit --></div>]]></template>
+        <template><![CDATA[<div class="mwb-container">
+    <div class="mwb-header">
+        <h2>Moveworks Object Builder</h2>
+        <p class="mwb-subtitle">Describe the Moveworks object you need — Claude will build it.</p>
+    </div>
+
+    <div class="mwb-form">
+        <div class="form-group">
+            <label>Your Request</label>
+            <textarea class="form-control mwb-textarea"
+                      ng-model="c.data.userRequest"
+                      placeholder="e.g. Create an action to reset a user password and send a notification"
+                      rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Object Type</label>
+            <div class="mwb-type-selector">
+                <button class="btn mwb-type-btn" ng-class="{'active': c.data.objectType === 'action'}" ng-click="c.data.objectType = 'action'">Action</button>
+                <button class="btn mwb-type-btn" ng-class="{'active': c.data.objectType === 'event'}"  ng-click="c.data.objectType = 'event'">Event</button>
+                <button class="btn mwb-type-btn" ng-class="{'active': c.data.objectType === 'slot'}"   ng-click="c.data.objectType = 'slot'">Slot</button>
+            </div>
+        </div>
+
+        <button class="btn btn-primary mwb-build-btn"
+                ng-click="c.buildObject()"
+                ng-disabled="c.data.loading || !c.data.userRequest">
+            <span ng-if="!c.data.loading">&#9889; Build Object</span>
+            <span ng-if="c.data.loading">Building...</span>
+        </button>
+    </div>
+
+    <div class="mwb-error" ng-if="c.data.error">
+        <strong>Error:</strong> {{c.data.error}}
+    </div>
+
+    <div class="mwb-result" ng-if="c.data.result">
+        <div class="mwb-result-header">
+            <h4>Generated Moveworks Object</h4>
+            <div class="mwb-badges">
+                <span class="mwb-badge-type">{{c.data.result.type}}</span>
+                <span class="mwb-badge-id">{{c.data.result.id}}</span>
+            </div>
+        </div>
+        <pre class="mwb-json">{{c.data.resultJson}}</pre>
+        <div class="mwb-actions">
+            <button class="btn btn-success" ng-click="c.saveObject()">Save to ServiceNow</button>
+            <button class="btn btn-default" ng-click="c.copyJson()">Copy JSON</button>
+            <button class="btn btn-default" ng-click="c.reset()">New Object</button>
+        </div>
+        <div class="mwb-saved-msg" ng-if="c.data.saved">
+            Saved! <a ng-href="/x_146833_movewor_0_mw_object.do?sys_id={{c.data.savedSysId}}">View record</a>
+        </div>
+    </div>
+</div>]]></template>
     </sp_widget>
 </record_update>
