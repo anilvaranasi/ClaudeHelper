@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_146833_movewor_0.MoveworksAPI</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description>Plain utility class — calls Claude API. Use from widget server scripts, business rules, etc.</description>
+        <mobile_callable>false</mobile_callable>
+        <name>MoveworksAPI</name>
+        <sandbox_callable>false</sandbox_callable>
+        <script><![CDATA[var MoveworksAPI = Class.create();
+MoveworksAPI.prototype = {
+    initialize: function() {},
+
+    /**
+     * Calls Anthropic Claude API via the configured REST message.
+     * Returns a JSON string of the generated Moveworks object.
+     */
+    callClaudeAPI: function(userRequest) {
+        try {
+            var rm = new sn_ws.RESTMessageV2('Moveworks Claude API', 'Build Object');
+
+            var body = {
+                model: 'claude-3-5-sonnet-20241022',
+                max_tokens: 2048,
+                system: 'You are a Moveworks object builder. Generate valid Moveworks JSON objects. Return only the tool call, no extra text.',
+                tools: [{
+                    name: 'build_moveworks_object',
+                    description: 'Builds and returns a valid Moveworks object (Action, Event, or Slot) as structured JSON.',
+                    input_schema: {
+                        type: 'object',
+                        properties: {
+                            id: {
+                                type: 'string',
+                                description: 'Unique ID. Format: action.<name> | event.<name> | slot.<name>'
+                            },
+                            name: {
+                                type: 'string',
+                                description: 'Human readable name'
+                            },
+                            type: {
+                                type: 'string',
+                                enum: ['action', 'event', 'slot'],
+                                description: 'Moveworks object type'
+                            },
+                            description: {
+                                type: 'string',
+                                description: 'What this object does (1-2 sentences)'
+                            },
+                            parameters: {
+                                type: 'array',
+                                description: 'Input parameters (for actions/events)',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        name:        { type: 'string' },
+                                        type:        { type: 'string' },
+                                        description: { type: 'string' },
+                                        required:    { type: 'boolean' }
+                                    }
+                                }
+                            },
+                            output: {
+                                type: 'object',
+                                description: 'Output spec (for actions)',
+                                properties: {
+                                    type:        { type: 'string' },
+                                    description: { type: 'string' }
+                                }
+                            },
+                            trigger: {
+                                type: 'string',
+                                description: 'What triggers this event (for event objects)'
+                            },
+                            payload: {
+                                type: 'array',
+                                description: 'Payload fields (for event objects)',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        name:        { type: 'string' },
+                                        type:        { type: 'string' },
+                                        description: { type: 'string' }
+                                    }
+                                }
+                            },
+                            data_type: {
+                                type: 'string',
+                                description: 'Data type for slot objects'
+                            },
+                            required: {
+                                type: 'boolean',
+                                description: 'Whether this slot is required'
+                            },
+                            default_value: {
+                                description: 'Default value for slot objects'
+                            }
+                        },
+                        required: ['id', 'name', 'type', 'description']
+                    }
+                }],
+                tool_choice: { type: 'tool', name: 'build_moveworks_object' },
+                messages: [{
+                    role: 'user',
+                    content: this._buildPrompt(userRequest)
+                }]
+            };
+
+            rm.setRequestBody(JSON.stringify(body));
+            var response   = rm.execute();
+            var statusCode = response.getStatusCode();
+
+            if (statusCode !== 200) {
+                gs.error('MoveworksAPI: Claude API returned status ' + statusCode + ' — ' + response.getBody());
+                return JSON.stringify({ error: 'Claude API error: HTTP ' + statusCode });
+            }
+
+            var responseBody = JSON.parse(response.getBody());
+
+            // Extract the tool_use block — contains the structured Moveworks object
+            if (responseBody.content) {
+                for (var i = 0; i < responseBody.content.length; i++) {
+                    if (responseBody.content[i].type === 'tool_use') {
+                        return JSON.stringify(responseBody.content[i].input);
+                    }
+                }
+            }
+            return JSON.stringify({ error: 'No tool_use block in Claude response' });
+
+        } catch (e) {
+            gs.error('MoveworksAPI.callClaudeAPI: ' + e.message);
+            return JSON.stringify({ error: e.message });
+        }
+    },
+
+    /**
+     * Builds an XML-structured prompt for Claude.
+     */
+    _buildPrompt: function(userRequest) {
+        return [
+            '<role>',
+            '  You are a Moveworks object builder. Generate a valid Moveworks JSON object based on the request.',
+            '</role>',
+            '<guidelines>',
+            '  1. Always include required fields: id, name, type, description',
+            '  2. Use snake_case for all id values and parameter names',
+            '  3. Prefix IDs correctly: action. / event. / slot.',
+            '  4. For actions, always include parameters array and output block',
+            '  5. For events, always include trigger and payload array',
+            '  6. For slots, always include data_type and required fields',
+            '</guidelines>',
+            '<user_request>',
+            userRequest,
+            '</user_request>'
+        ].join('\n');
+    },
+
+    type: 'MoveworksAPI'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-07-27 03:00:00</sys_created_on>
+        <sys_id>3b0f42c693564b10945375dcebba10d2</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>MoveworksAPI</sys_name>
+        <sys_package display_value="Moveworks Object Builder" source="x_146833_movewor_0">063f0c869312c710945375dcebba1005</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Moveworks Object Builder">063f0c869312c710945375dcebba1005</sys_scope>
+        <sys_update_name>sys_script_include_api_3b0f42c693564b10945375dcebba10d2</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-07-27 03:00:00</sys_updated_on>
+    </sys_script_include>
+</record_update>
