@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_146833_movewor_0.MoveworksBuilder</api_name>
+        <caller_access/>
+        <client_callable>true</client_callable>
+        <description>Builds Moveworks objects via Claude API</description>
+        <mobile_callable>false</mobile_callable>
+        <name>MoveworksBuilder</name>
+        <sandbox_callable>false</sandbox_callable>
+        <script><![CDATA[var MoveworksBuilder = Class.create();
+MoveworksBuilder.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+    // TODO: logic will be added here after source control commit
+    buildObject: function() {
+        return "{}";
+    },
+    type: "MoveworksBuilder"
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-07-27 01:06:22</sys_created_on>
+        <sys_id>2a0f42c693564b10945375dcebba10c1</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>MoveworksBuilder</sys_name>
+        <sys_package display_value="Moveworks Object Builder" source="x_146833_movewor_0">063f0c869312c710945375dcebba1005</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Moveworks Object Builder">063f0c869312c710945375dcebba1005</sys_scope>
+        <sys_update_name>sys_script_include_2a0f42c693564b10945375dcebba10c1</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-07-27 01:06:22</sys_updated_on>
+    </sys_script_include>
+</record_update>

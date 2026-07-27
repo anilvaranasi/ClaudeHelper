@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[// TODO: client script will be added after commit]]></client_script>
+        <controller_as>c</controller_as>
+        <css>/* TODO: styles will be added after commit */</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description>AI-powered Moveworks object builder using Claude API</description>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>moveworks-builder</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Moveworks Object Builder</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[// TODO: server script will be added after commit]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-07-27 01:06:27</sys_created_on>
+        <sys_id>7b0f46c693564b10945375dcebba1081</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Moveworks Object Builder</sys_name>
+        <sys_package display_value="Moveworks Object Builder" source="x_146833_movewor_0">063f0c869312c710945375dcebba1005</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Moveworks Object Builder">063f0c869312c710945375dcebba1005</sys_scope>
+        <sys_update_name>sp_widget_7b0f46c693564b10945375dcebba1081</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-07-27 01:06:27</sys_updated_on>
+        <template><![CDATA[<div><!-- TODO: UI will be added after commit --></div>]]></template>
+    </sp_widget>
+</record_update>

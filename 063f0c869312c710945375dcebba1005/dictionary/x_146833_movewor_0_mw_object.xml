@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element attributes="enforce_dot_walk_cross_scope_access=true" db_object_id="4b0f82c693564b10945375dcebba1093" label="Moveworks Object" max_length="40" name="x_146833_movewor_0_mw_object" type="collection">
+        <element label="User Request" max_length="1000" name="request" type="string"/>
+        <element label="Object Type" max_length="50" name="object_type" type="string"/>
+        <element label="Generated JSON" max_length="8000" name="object_json" type="translated_text"/>
+        <element label="Object ID" max_length="255" name="object_id" type="string"/>
+        <element label="Object Name" max_length="255" name="object_name" type="string"/>
+        <element label="State" max_length="50" name="state" type="string"/>
+    </element>
+</database>

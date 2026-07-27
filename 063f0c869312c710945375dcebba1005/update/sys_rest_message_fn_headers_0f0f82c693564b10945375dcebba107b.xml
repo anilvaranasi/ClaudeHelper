@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rest_message_fn_headers">
+    <sys_rest_message_fn_headers action="INSERT_OR_UPDATE">
+        <name>x-api-key</name>
+        <rest_message_function/>
+        <sys_class_name>sys_rest_message_fn_headers</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-07-27 01:06:23</sys_created_on>
+        <sys_id>0f0f82c693564b10945375dcebba107b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x-api-key</sys_name>
+        <sys_package display_value="Moveworks Object Builder" source="x_146833_movewor_0">063f0c869312c710945375dcebba1005</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Moveworks Object Builder">063f0c869312c710945375dcebba1005</sys_scope>
+        <sys_update_name>sys_rest_message_fn_headers_0f0f82c693564b10945375dcebba107b</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-07-27 01:06:23</sys_updated_on>
+        <value>YOUR_ANTHROPIC_API_KEY_HERE</value>
+    </sys_rest_message_fn_headers>
+</record_update>
